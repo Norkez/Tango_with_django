@@ -2,4 +2,5 @@ db.sqlite3
 *.pyc
 rango/migrations/
 .vscode/
-db.sqlite3
+setting
+secrets.json
