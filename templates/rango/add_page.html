@@ -12,7 +12,7 @@
 <div>
     {% if category %}
     <strong>Category: {{ category }}</strong>
-    <form id="page_form" method="post" action="{% url 'rango:add_page' category.slug  %}">
+    <form id="page_form" method="post" action="{% url 'add_page' category.slug  %}">
         {% csrf_token %}
         {% for hidden in form.hidden_fields %}
             {{ hidden }}
@@ -21,7 +21,7 @@
         <div style= padding-bottom:10px;>
             {{ field.errors }}
             {{ field.help_text }}
-            {{ field }}<br />
+            {{ field }}
         </div>
         {% endfor %}
         <input type="submit" name="submit" value="Create Page" />
