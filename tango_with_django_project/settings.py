@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rango',
+    'registration',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -148,3 +149,18 @@ MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
 LOGIN_URL = '/rango/login/'
+
+# True라면 user는 가입할 수 있다.
+REGISTRATION_OPEN = True
+
+ACCOUNT_ACTIVATION_DAYS = 7
+
+# True라면 user는 자동으로 로그인할 수 있게 된다.
+REGISTRATION_AUTO_LOGIN = True
+
+# user가 로그인에 성공한 후 가게 될 페이지
+LOGIN_REDIRECT_URL = '/rango/'
+
+# user가 로그인하지 않았을 때 가게 될 페이지
+# 또한 인증을 필요로 하는 페이지에 접속 시도를 할 때 보게 될 페이지
+LOGIN_URL = '/accounts/login/'
