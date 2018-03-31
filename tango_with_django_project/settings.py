@@ -21,7 +21,6 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
-
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"secrets.json")) as f:
     print()
     secrets = json.loads(f.read())
@@ -147,3 +146,5 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
+LOGIN_URL = '/rango/login/'
