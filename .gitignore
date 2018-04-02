@@ -4,3 +4,4 @@ rango/migrations/
 .vscode/
 setting
 secrets.json
+*.key
