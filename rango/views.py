@@ -2,7 +2,7 @@ from datetime import datetime
 
 
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
+from rango.wehose_search import run_query
 
 def visitor_cookie_handler(request):
     # 사이트 접속 횟수를 얻는다.
@@ -178,3 +179,45 @@ def restricted(request):
 #     logout(request)
 #     return HttpResponseRedirect(reverse('index'))
 
+def search(request):
+    result_list = []
+    user_query = ""
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        if query:
+            result_list = run_query(query)
+            user_query = query
+
+    return render(request, 'rango/search.html', {'result_list': result_list, 'user_query': user_query})
+
+# def track_url(request, page_id):
+#     """
+#     query string 으로 처리하지 않고 매개변수 url로 처리
+#     """
+
+#     if page_id:
+#         page = get_object_or_404(Page, pk=page_id)
+#         page.views += 1
+#         page.save()
+#         return redirect(page.url)
+#     else:
+#         return redirect(reverse('index'))
+
+def track_url(request):
+    """
+    http GET에 담긴  query string을 꺼내 page_id에 담는다.
+    인스턴스를 생성 후 Page 모델의 views 필드 값을 1 증가 시킨후 저장한다.
+    이후에 page객체의 url값으로 리디렉션 시킨다.
+    만약 page_id 값이 없다면 index 페이지로 리디렉션 시킨다.
+    """
+    if request.method == 'GET':
+        page_id = request.GET.get('page_id', None)
+        # page_id 가 없다면 None 값을 반환한다.
+        if page_id:
+            page = get_object_or_404(Page, pk=page_id)
+
+            page.views += 1
+            page.save()
+            return redirect(page.url)
+        else:
+            return redirect(reverse('index'))

@@ -1,3 +1,4 @@
+import os
 import json
 import urllib.parse
 import urllib.request
@@ -12,18 +13,25 @@ def read_webhose_key():
     webhose_api_key = None
 
     try:
-        with open('search.key', 'r') as f:
-            webhose_api_key = f.readline().strip()
-    
+        if os.path.isfile("search.key"):
+            with open('search.key', 'r') as f:
+                webhose_api_key = f.readline().strip()
+        else:
+            with open('../search.key', 'r') as f:
+                webhose_api_key = f.readline().strip()
+
     except:
         raise IOError('search.key file not found')
 
     return webhose_api_key
 
-def run_query(search_terms, szie=10):
+def run_query(search_terms, size=10):
     """
+    Given a string contatining search terms (query), and a number of results to
+    return (default of 10), returns a list of results from the Wehose API,
+    with each result consisting of a title, link and summary.
     """
-    webhose_api_key = read_webhose_key
+    webhose_api_key = read_webhose_key()
 
     if not webhose_api_key:
         raise KeyError('Webhose key not found')
@@ -32,8 +40,8 @@ def run_query(search_terms, szie=10):
 
     query_string = urllib.parse.quote(search_terms)
 
-    search_url = ('{root_url}?token={key}&foramt=json&q={query}'
-                    '&sort=relevancy&size={size}').foramt(
+    search_url = ('{root_url}?token={key}&format=json&q={query}'
+                    '&sort=relevancy&size={size}').format(
                         root_url=root_url,
                         key=webhose_api_key,
                         query=query_string,
@@ -41,7 +49,7 @@ def run_query(search_terms, szie=10):
     results = []
 
     try:
-        reponse = urllib.request.urlopen(search_url).read().decode('utf-8')
+        response = urllib.request.urlopen(search_url).read().decode('utf-8')
         json_response = json.loads(response)
 
         for post in json_response['posts']:
@@ -52,4 +60,15 @@ def run_query(search_terms, szie=10):
         print("Error when querying the Webhose API")
 
     return results
+
+if __name__ == "__main__":
+    search_terms = input("Please write search terms: ")
+    results = json.dumps(run_query(search_terms, size=10))
+    try:
+        with open('results.txt', 'w') as f:
+            f.write(results)
+        print("'results.txt' saved successfuly.")
+    except:
+        Print("error occured.")
+
     

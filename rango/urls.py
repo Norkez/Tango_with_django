@@ -16,4 +16,9 @@ urlpatterns = [
 
     url(r'^restricted/', views.restricted, name='restricted'),
     # url(r'^logout/$', views.user_logout, name='logout'),
+
+    url(r'^search/$', views.search, name='search'),
+    # url(r'^goto/(?P<page_id>[\d]+)$', views.track_url, name='goto'),
+    #  query string 사용하지 않고 매개변수로 받아 처리
+    url(r'^goto/$', views.track_url, name='goto'),
 ]

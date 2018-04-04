@@ -13,7 +13,7 @@
         {% if pages %}
             <ul>
                 {% for page in pages %}
-                <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+                <li><a href="{% url 'goto' %}?page_id={{ page.pk }}">{{ page.title }}</a> {{ page.views }}</li>
                 {% endfor %}
             </ul>
         {% else %}
